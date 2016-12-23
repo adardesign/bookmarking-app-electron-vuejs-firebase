@@ -3,23 +3,20 @@
     <sidebar
       :categories="categories"
       v-on:category-selected="setSelectedCategory">
-      <!-- bind 'selected-category event to the event handler setSelectedCategory' -->
     </sidebar>
     <bookmark-list
-      :bookmarks="bookmarks | filterByCategory selectedCategory"
+      :bookmarks="filteredBookmarks"
       :categories="categories">
     </bookmark-list>
-  </div>
 </template>
 
 <script>
-  import store from './store'
-  import Sidebar from './components/Sidebar.vue'
-  import BookmarkList from './components/BookmarkList.vue'
-  import { filterByCategory } from './filters'
+  import store from './store';
+  import Sidebar from './components/Sidebar.vue';
+  import BookmarkList from './components/BookmarkList.vue';
+  import { filterByCategory } from './filters';
 
   export default {
-
     components: {
       Sidebar,
       BookmarkList
@@ -33,25 +30,26 @@
       }
     },
 
-    filters: {
-      filterByCategory
-    },
-
     created () {
-      store.on('data-updated', this.updateListings)
+      store.on('data-updated', this.updateListings);
+      store.on('category-selected', this.setSelectedCategory)
     },
 
     methods: {
-      updateListings (categories, bookmarks) {
-        this.categories = categories
-        this.bookmarks = bookmarks
+      updateListings(categories, bookmarks) {
+        this.categories = categories;
+        this.bookmarks = bookmarks;
       },
 
       setSelectedCategory (category) {
         this.selectedCategory = category;
       }
+    },
 
+    computed: {
+      filteredBookmarks () {
+        return filterByCategory(this.bookmarks, this.selectedCategory);
+      }
     }
-
   }
 </script>

@@ -2,29 +2,28 @@
   <div id="links-container">
     <div id="toolbar">
       <div class="ui inverted icon fluid input">
-        <input v-model="query" type="text" placeholder="Filter your links...">
+        <input type="text" v-model="query" placeholder="Filter your links...">
         <i class="search icon"></i>
       </div>
     </div>
     <div class="ui relaxed divided selection list">
-      <bookmark v-for="(id, bookmark) in bookmarks | filterByTitle query"
+      <bookmark v-for="(bookmark, id) in filteredBookmarks"
         :id="id"
         :title="bookmark.title"
         :url="bookmark.url"
         :category="bookmark.category"
-        :category-color="categories[bookmark.category]">
+        :color="categories[bookmark.category]">
       </bookmark>
     </div>
   </div>
 </template>
 
 <script>
-  import Bookmark from './Bookmark.vue'
-  import { filterByTitle } from '../filters'
+  import Bookmark from './Bookmark.vue';
+  import {filterByTitle} from '../filters';
 
   export default {
-
-    data () {
+    data() {
       return {
         query: ''
       }
@@ -36,10 +35,10 @@
       Bookmark
     },
 
-    filters: {
-      filterByTitle
+    computed: {
+      filteredBookmarks() {
+        return filterByTitle(this.bookmarks, this.query);
+      }
     }
-
   }
-
 </script>

@@ -5,28 +5,27 @@
       <a class="header">{{title}}</a>
       <div class="description">
         {{url}}
-        <a class="ui {{categoryColor}} tiny label right-float">{{category}}</a>
+        <a v-bind:class="'ui ' + color + ' tiny label right-float'">{{category}}</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { shell } from 'electron'
-  import store from '../store'
+  import {shell} from 'electron';
+  import store from '../store';
 
   export default {
-    props: ['id', 'title', 'url', 'category', 'categoryColor'],
+    props: ['id', 'title', 'url', 'category', 'color'],
 
     methods: {
-      deleteBookmark () {
-        store.deleteBookmark(this.id)
+      deleteBookmark() {
+        store.deleteBookmark(this.id);
       },
 
       openLink () {
-        shell.openExternal(this.url)
+        shell.openExternal(this.url);
       }
     }
-
   }
 </script>

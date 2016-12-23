@@ -2,7 +2,7 @@
   <div>
     <div id="categories">
       <div id="cat-header">
-        <h2><i class="bookmark icon"></i>Bookmark | coligo</h2>
+        <h2><i class="bookmark icon"></i>Bookmark</h2>
       </div>
       <div class="container">
         <h2>Categories
@@ -13,25 +13,23 @@
         <div class="ui list">
           <div class="item clickable">
             <div class="content">
-              <a class="ui grey empty circular label"></a>
+              <a href="" class="ui grey empty circular label"></a>
               <span @click="categorySelected('')">All</span>
             </div>
           </div>
-          <div v-for="(name, color) in categories" class="item clickable">
+          <div v-for="(color, name) in categories" class="item clickable">
             <div class="content">
-              <a class="ui {{ color }} empty circular label"></a>
+              <a v-bind:class="'ui ' + color + ' empty circular label'"></a>
               <span @click="categorySelected(name)"
-                :class="{selected: selectedCategory === name}">
-                {{ name }}
+                :class="{selected: selectedCategory === name}">{{name}}
               </span>
-              <i v-if="name !== 'Uncategorized'" class="remove icon right-float"
+              <i v-if="name != 'Uncategorized'" class="remove icon right-float"
                 @click="deleteCategory(name)">
               </i>
             </div>
           </div>
         </div>
-        <button @click="addBookmark"
-          class="ui grey inverted basic icon circular button right-float">
+        <button @click="addBookmark" class="ui grey inverted basic icon circular button right-float">
           <i class="icon add"></i>
         </button>
       </div>
@@ -41,14 +39,12 @@
   </div>
 </template>
 
-
 <script>
-  import store from '../store'
-  import CategoryModal from './CategoryModal.vue'
-  import BookmarkModal from './BookmarkModal.vue'
+  import store from '../store';
+  import CategoryModal from './CategoryModal.vue';
+  import BookmarkModal from './BookmarkModal.vue';
 
   export default {
-
     data () {
       return {
         selectedCategory: ''
@@ -63,25 +59,22 @@
     },
 
     methods: {
-
       addBookmark () {
-        this.$broadcast('add-bookmark')
+        store.emit('add-bookmark');
       },
 
       addCategory () {
-        this.$broadcast('add-category')
+        store.emit('add-category');
       },
 
       deleteCategory (category) {
-        store.deleteCategory(category)
+        store.deleteCategory(category);
       },
 
       categorySelected (category) {
-        this.selectedCategory = category
-        this.$dispatch('category-selected', category)
+        this.selectedCategory = category;
+        store.emit('category-selected', this.selectedCategory);
       }
-
     }
-
   }
 </script>
